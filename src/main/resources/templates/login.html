@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!--/*@thymesVar id="title" type=""*/-->
+        <title th:text="${title}"></title>
+        <!-- 引入样式 -->
+        <link th:href="@{/lib/css/element-ui.css}" rel="stylesheet">
+        <style>
+            #app {
+                width: 500px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <el-main>
+                <h4>用户登录</h4>
+                <form method="post" th:action="@{/doLogin}">
+                    <label>
+                        手机号
+                        <el-input placeholder="手机号" v-model="phone"></el-input>
+                    </label>
+                    <label>
+                        密码
+                        <el-input placeholder="密码" show-password v-model="password"></el-input>
+                    </label>
+                    <br>
+                    <p style="color: red">{{msg}}</p>
+                    <el-link type="primary" th:href="@{/signUp}">没有账号?去注册</el-link>
+                    <br>
+                    <el-button @click="loginValidate() && login()" type="primary">登录</el-button>
+                </form>
+            </el-main>
+        </div>
+    </body>
+    <script th:src="@{/lib/js/axios.min.js}"></script>
+    <script th:src="@{/lib/js/vue.js}"></script>
+    <script th:src="@{/lib/js/element-ui.js}"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                phone: '',
+                password: '',
+                msg: ''
+            },
+            methods: {
+                loginValidate: function () {
+                    if (this.phone.trim() === '') {
+                        this.msg = '手机号不能为空!';
+                        return false;
+                    }
+                    let phoneReg = /^1[35789]\d{9}$/;
+                    if (!phoneReg.test(this.phone.trim())) {
+                        this.msg = '手机号不合法!';
+                        return false;
+                    }
+                    if (this.password.trim() === '') {
+                        this.msg = '密码不能为空,且不能包含空格!';
+                        return false;
+                    }
+                    return true;
+                },
+                login: function () {
+                    this.msg = '';
+                    let p = {
+                        'phone': this.phone,
+                        'password': this.password,
+                    }
+                    let self = this;
+                    axios.post("/doLogin", p)
+                        .then(function (response) {
+                            let data = response.data;
+                            if (data && data.code === 200)
+                                self.msg = '登录成功!';
+                            else
+                                self.msg = data.msg;
+                        })
+                        .catch(function (error) {
+                            self.msg = '登录失败!';
+                        });
+                }
+            }
+        })
+    </script>
+</html>
