@@ -25,7 +25,7 @@
                         <el-input placeholder="密码" show-password v-model="password"></el-input>
                     </label>
                     <br>
-                    <p style="color: red">{{msg}}</p>
+                    <p style="color: red" v-text="msg"></p>
                     <el-link type="primary" th:href="@{/signUp}">没有账号?去注册</el-link>
                     <br>
                     <el-button @click="loginValidate() && login()" type="primary">登录</el-button>

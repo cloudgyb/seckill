@@ -31,7 +31,7 @@
                     确认密码
                     <el-input v-model="secPassword" show-password placeholder="请确认密码"></el-input>
                 </label><br>
-                <p style="color: red">{{msg}}</p>
+                <p style="color: red" v-text="msg"></p>
                 <el-link type="primary" th:href="@{/login}">已有账号?去登录</el-link>
                 <br>
                 <el-button @click="signUpValidate() && signUp()">注册</el-button>
