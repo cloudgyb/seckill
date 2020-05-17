@@ -1,7 +1,7 @@
 package com.gyb.seckill.service.common;
 
 import com.alibaba.fastjson.JSON;
-import com.gyb.seckill.config.CacheKeyPrefix;
+import com.gyb.seckill.config.cache.CacheKeyPrefix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

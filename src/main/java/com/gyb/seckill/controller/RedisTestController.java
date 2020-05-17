@@ -1,6 +1,6 @@
 package com.gyb.seckill.controller;
 
-import com.gyb.seckill.config.UserCacheKeyPrefix;
+import com.gyb.seckill.config.cache.UserCacheKeyPrefix;
 import com.gyb.seckill.service.common.RedisService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,6 @@
-package com.gyb.seckill.config;
+package com.gyb.seckill.config.cache;
+
+import com.gyb.seckill.config.cache.CacheKeyPrefix;
 
 /**
  * @author geng

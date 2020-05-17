@@ -6,31 +6,61 @@
         <!-- 引入样式 -->
         <link th:href="@{/lib/css/element-ui.css}" rel="stylesheet">
         <style>
-            #app {
-                width: 500px;
+            body{
+                margin: 0;
+            }
+            .el-header{
+                line-height: 60px;
+                font-size:40px;
+                color: #ee4b19;
+            }
+            .el-main{
+                background-size: cover;
+                background: gray url("/images/login_bg.jpg") no-repeat center 50%;
+                height: 600px;
+            }
+            .el-footer{
+                line-height: 60px;
+                color: #9c9c9c;
+            }
+            .login-form{
+                position: absolute;
+                right: 50px;
+                top:120px;
+                width: 300px;
+                height: 300px;
+                padding: 30px;
+                border: 1px solid #ccc;
+                background: #fafafa;
             }
         </style>
     </head>
     <body>
         <div id="app">
-            <el-main>
-                <h4>用户登录</h4>
-                <form method="post" th:action="@{/doLogin}">
-                    <label>
-                        手机号
-                        <el-input placeholder="手机号" v-model="phone"></el-input>
-                    </label>
-                    <label>
-                        密码
-                        <el-input placeholder="密码" show-password v-model="password"></el-input>
-                    </label>
-                    <br>
-                    <p style="color: red" v-text="msg"></p>
-                    <el-link type="primary" th:href="@{/signUp}">没有账号?去注册</el-link>
-                    <br>
-                    <el-button @click="loginValidate() && login()" type="primary">登录</el-button>
-                </form>
-            </el-main>
+            <el-container>
+                <el-header>
+                    商品秒杀
+                    <el-link th:href="@{/signUp}" type="primary" style="font-size: 10px;float:right">免费注册</el-link>
+                </el-header>
+                <el-main>
+                    <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="0" class="login-form">
+                        <el-form-item prop="phone">
+                            <el-input v-model="loginForm.phone" placeholder="手机号"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="password">
+                            <el-input v-model="loginForm.password" show-password placeholder="密码">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button style="width:100%" @click="submitForm('loginForm')" type="primary">登录</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <span v-html="msg"></span>
+                        </el-form-item>
+                    </el-form>
+                </el-main>
+                <el-footer>&copy;2020 Geng版权所有</el-footer>
+            </el-container>
         </div>
     </body>
     <script th:src="@{/lib/js/axios.min.js}"></script>
@@ -39,34 +69,47 @@
     <script>
         new Vue({
             el: '#app',
-            data: {
-                phone: '',
-                password: '',
-                msg: ''
+            data: function(){
+                let validatePhone = (rule, value, callback) => {
+                        if (value === '') {
+                            callback(new Error('请输入手机号'));
+                        } else {
+                            let phoneRegx = /^1[35789]\d{9}$/
+                            if (!phoneRegx.test(this.loginForm.phone)) {
+                                callback(new Error('输入的手机号不合法'));
+                            } else {
+                                callback();
+                            }
+                        }
+                    };
+                    return {
+                        loginForm: {
+                            phone: '',
+                            password: ''
+                        },
+                        msg:'',
+                        rules: {
+                            phone: [
+                                {validator: validatePhone, trigger: 'blur'}
+                            ],
+                            password: [
+                                {required: true, message: '请输入密码', trigger: 'blur'}
+                            ]
+                        }
+                    }
             },
             methods: {
-                loginValidate: function () {
-                    if (this.phone.trim() === '') {
-                        this.msg = '手机号不能为空!';
-                        return false;
-                    }
-                    let phoneReg = /^1[35789]\d{9}$/;
-                    if (!phoneReg.test(this.phone.trim())) {
-                        this.msg = '手机号不合法!';
-                        return false;
-                    }
-                    if (this.password.trim() === '') {
-                        this.msg = '密码不能为空,且不能包含空格!';
-                        return false;
-                    }
-                    return true;
+                submitForm: function(form){
+                    this.$refs[form].validate((valid) => {
+                        if (valid) {
+                            this.login(this.loginForm);
+                        } else {
+                            return false;
+                        }
+                    });
                 },
-                login: function () {
+                login: function (p) {
                     this.msg = '';
-                    let p = {
-                        'phone': this.phone,
-                        'password': this.password,
-                    }
                     let self = this;
                     axios.post("/doLogin", p)
                         .then(function (response) {
@@ -74,10 +117,10 @@
                             if (data && data.code === 200)
                                 self.msg = '登录成功!';
                             else
-                                self.msg = data.msg;
+                                self.msg = '<span style="color: #bb0202">'+data.msg+'</span>';
                         })
                         .catch(function (error) {
-                            self.msg = '登录失败!';
+                            self.msg = '<span style="color: #bb0202">登录失败!</span>';
                         });
                 }
             }

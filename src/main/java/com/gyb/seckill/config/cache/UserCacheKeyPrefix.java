@@ -1,4 +1,4 @@
-package com.gyb.seckill.config;
+package com.gyb.seckill.config.cache;
 
 /**
  * @author geng
