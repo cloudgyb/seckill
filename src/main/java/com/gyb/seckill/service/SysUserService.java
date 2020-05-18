@@ -26,8 +26,12 @@ public class SysUserService {
     }
 
     public SysUser getByToken(String token){
-        if(StringUtils.hasText(token))
-            return redisService.get(UserSessionTokenPrefix.TK, token, SysUser.class);
+        if(StringUtils.hasText(token)) {
+            SysUser user = redisService.get(UserSessionTokenPrefix.TK, token, SysUser.class);
+            if(user != null){ //刷新token过期时间
+                redisService.set(UserSessionTokenPrefix.TK,token,user);
+            }
+        }
         return null;
     }
 }
