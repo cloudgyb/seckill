@@ -1,6 +1,6 @@
 package com.gyb.seckill.service.syslogin;
 
-import com.gyb.seckill.entity.SysUser;
+import com.gyb.seckill.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,8 +11,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class SysLoginValidatorOutput implements ValidatorOutput {
+public class LoginValidatorOutput implements ValidatorOutput {
     private int code;
     private String mess;
-    private SysUser user;
+    private User user;
 }

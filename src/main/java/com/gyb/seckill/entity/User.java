@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
-public class SysUser {
+public class User {
     private int id;
     private String nickName;
     private String phone;

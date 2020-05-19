@@ -10,11 +10,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SysLoginValidatorInput implements ValidatorInput {
-    private String userId;
-    private String userName;
-    private String phone;
+public class LoginValidatorInput implements ValidatorInput {
+    private String account;
     private String password;
     private String checkCode;
     private String ip;
+    private Class<? extends LoginType> loginType;
 }

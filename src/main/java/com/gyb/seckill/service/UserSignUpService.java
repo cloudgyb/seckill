@@ -2,8 +2,8 @@ package com.gyb.seckill.service;
 
 import com.gyb.seckill.vo.ResponseResult;
 import com.gyb.seckill.controller.form.UserSignUpForm;
-import com.gyb.seckill.dao.SysUserDao;
-import com.gyb.seckill.entity.SysUser;
+import com.gyb.seckill.dao.UserDao;
+import com.gyb.seckill.entity.User;
 import com.gyb.seckill.utils.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,10 +22,10 @@ import java.util.UUID;
 @Transactional
 @Slf4j
 public class UserSignUpService {
-    private final SysUserDao sysUserDao;
+    private final UserDao userDao;
 
-    public UserSignUpService(SysUserDao sysUserDao) {
-        this.sysUserDao = sysUserDao;
+    public UserSignUpService(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     public ResponseResult signUp(UserSignUpForm form){
@@ -33,7 +33,7 @@ public class UserSignUpService {
         if(isPhoneExist(phone)){
             return ResponseResult.error("手机号已经被注册!");
         }
-        SysUser user = new SysUser();
+        User user = new User();
         user.setNickName(form.getNickName());
         String salt = generatePassSalt(form.getPhone()); //生成随机盐
         user.setPasswordSalt(salt);
@@ -41,7 +41,7 @@ public class UserSignUpService {
         user.setAge(form.getAge());
         user.setPhone(phone);
         user.setCreateDate(new Date());
-        int n = sysUserDao.save(user);
+        int n = userDao.save(user);
         if(n != 1){
             log.warn("user sign up failed!id="+user.getPhone());
             return ResponseResult.error("注册失败!",null);
@@ -51,12 +51,12 @@ public class UserSignUpService {
     }
 
     public boolean isPhoneExist(String phone) {
-        int n = sysUserDao.countByPhone(phone);
+        int n = userDao.countByPhone(phone);
         return n>0;
     }
 
     public boolean isNickNameExist(String nickName){
-        return  sysUserDao.countByNickName(nickName) > 0;
+        return  userDao.countByNickName(nickName) > 0;
     }
 
     private String generatePassSalt(String phone) {
