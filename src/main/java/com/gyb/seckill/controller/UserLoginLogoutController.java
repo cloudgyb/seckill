@@ -6,11 +6,9 @@ import com.gyb.seckill.service.syslogin.UserLoginService;
 import com.gyb.seckill.vo.ResponseResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,6 +38,20 @@ public class UserLoginLogoutController {
         String remoteAddr = request.getRemoteAddr();
         loginForm.setIp(remoteAddr);
         return userLoginService.login(loginForm);
+    }
+
+    @PostMapping("/doLogout")
+    @ResponseBody
+    public ResponseResult logout(@RequestParam(value = "token",required = false) String paramToken,
+                                 @CookieValue("token") String cookieToken){
+        String token = "";
+        if(StringUtils.hasText(paramToken)){
+            token = paramToken;
+        }else if(StringUtils.hasText(cookieToken)){
+            token = cookieToken;
+        }
+        userLoginService.logout(token);
+        return ResponseResult.ok();
     }
 
 }

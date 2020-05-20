@@ -6,13 +6,11 @@ import com.gyb.seckill.entity.User;
 import com.gyb.seckill.service.common.RedisService;
 import com.gyb.seckill.utils.HttpServletUtil;
 import com.gyb.seckill.vo.ResponseResult;
-import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 /**
@@ -42,6 +40,10 @@ public class UserLoginService {
             return ResponseResult.ok("登录成功！",token);
         }
         return ResponseResult.of(code,mess,form.getPhone());
+    }
+
+    public void logout(String token){
+        redisService.del(UserSessionTokenPrefix.TK,token);
     }
 
     private String saveSession(LoginValidatorOutput output) {
