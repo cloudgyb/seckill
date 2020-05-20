@@ -24,7 +24,7 @@ CREATE TABLE `goods`  (
       `goods_name` varchar(255) DEFAULT '',
       `goods_title` varchar(255) DEFAULT '',
       `goods_img` varchar(255) DEFAULT '',
-      `goods_detail` longtext default '',
+      `goods_detail` longtext,
       `goods_price` decimal(10, 2),
       `goods_stock` int(255),
       PRIMARY KEY (`id`) USING BTREE
@@ -75,27 +75,6 @@ INSERT INTO `miaosha_order` VALUES (00000000000000000007, 18912341234, 2, 6);
 INSERT INTO `miaosha_order` VALUES (00000000000000000006, 18912341234, 2, 5);
 
 -- ----------------------------
--- Table structure for miaosha_user
--- ----------------------------
-DROP TABLE IF EXISTS `miaosha_user`;
-CREATE TABLE `miaosha_user`  (
-     `id` bigint(20) UNSIGNED ZEROFILL NOT NULL,
-     `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-     `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-     `salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-     `head` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-     `register_date` datetime(0) NULL DEFAULT NULL,
-     `last_login_date` datetime(0) NULL DEFAULT NULL,
-     `login_count` int(11) UNSIGNED ZEROFILL NOT NULL DEFAULT 00000000000,
-     PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of miaosha_user
--- ----------------------------
-INSERT INTO `miaosha_user` VALUES (00000000018912341234, '18912341234', 'b7797cce01b4b131b433b6acf4add449', '1a2b3c4d', NULL, NULL, NULL, 00000000000);
-
--- ----------------------------
 -- Table structure for order_info
 -- ----------------------------
 DROP TABLE IF EXISTS `order_info`;
@@ -104,7 +83,7 @@ CREATE TABLE `order_info`  (
    `user_id` bigint(20) NULL DEFAULT NULL,
    `goods_id` bigint(20) NULL DEFAULT NULL,
    `delivery_addr_id` bigint(20) NULL DEFAULT NULL,
-   `goods_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+   `goods_name` varchar(255) DEFAULT NULL,
    `goods_count` int(255) NULL DEFAULT NULL,
    `goods_price` decimal(10, 2) NULL DEFAULT NULL,
    `order_channel` tinyint(255) NULL DEFAULT NULL,
@@ -112,7 +91,7 @@ CREATE TABLE `order_info`  (
    `create_date` datetime(0) NULL DEFAULT NULL,
    `pay_date` datetime(0) NULL DEFAULT NULL,
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+);
 
 -- ----------------------------
 -- Records of order_info

@@ -43,7 +43,7 @@ public class UserLoginLogoutController {
     @PostMapping("/doLogout")
     @ResponseBody
     public ResponseResult logout(@RequestParam(value = "token",required = false) String paramToken,
-                                 @CookieValue("token") String cookieToken){
+                                 @CookieValue(value = "token",required = false) String cookieToken){
         String token = "";
         if(StringUtils.hasText(paramToken)){
             token = paramToken;
