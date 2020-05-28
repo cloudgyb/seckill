@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gyb.seckill.dao.MiaoshaOrderDao">
+  <sql id="fields">
+    id,user_id as userId,goods_id as goodsId,
+    order_id as orderId
+  </sql>
+  <select id="findAll" resultType="MiaoshaOrder">
+    select <include refid="fields" /> from miaosha_order
+  </select>
+</mapper>

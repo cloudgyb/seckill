@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gyb.seckill.dao.MiaoshaGoodsDao">
+  <sql id="fields">
+    id,goods_id as goodsId,miaosha_price as miaoshaPrice,
+    stock_count as stockCount,start_date as startDate,
+    end_date as endDate
+  </sql>
+  <select id="findAll" resultType="MiaoshaGoods">
+    select <include refid="fields" /> from miaosha_goods
+  </select>
+</mapper>

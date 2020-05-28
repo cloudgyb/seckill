@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gyb.seckill.dao.OrderInfoDao">
+  <sql id="fields">
+    id,user_id as userId,goods_id as goodsId,
+    delivery_addr_id as deliveryAddrId,goods_name as goodsName,
+    goods_count as goodsCount,goods_price as goodsPrice,
+    order_channel as orderChannel,status,create_date as createDate,pay_date as payDate
+  </sql>
+  <select id="findAll" resultType="OrderInfo">
+    select <include refid="fields" /> from order_info
+  </select>
+</mapper>
