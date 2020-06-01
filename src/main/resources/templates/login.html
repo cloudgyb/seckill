@@ -44,8 +44,8 @@
                 </el-header>
                 <el-main>
                     <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="0" class="login-form">
-                        <el-form-item prop="phone">
-                            <el-input v-model="loginForm.phone" placeholder="手机号"></el-input>
+                        <el-form-item prop="account">
+                            <el-input v-model="loginForm.account" placeholder="手机号/用户名/邮箱"></el-input>
                         </el-form-item>
                         <el-form-item prop="password">
                             <el-input v-model="loginForm.password" show-password placeholder="密码">
@@ -59,9 +59,9 @@
                         </el-form-item>
                     </el-form>
                 </el-main>
-                <el-footer>&copy;2020 Geng版权所有</el-footer>
             </el-container>
         </div>
+        <div th:insert="~{footer}"></div>
     </body>
     <script th:src="@{/lib/js/axios.min.js}"></script>
     <script th:src="@{/lib/js/vue.js}"></script>
@@ -70,7 +70,7 @@
         new Vue({
             el: '#app',
             data: function(){
-                let validatePhone = (rule, value, callback) => {
+               /* let validatePhone = (rule, value, callback) => {
                         if (value === '') {
                             callback(new Error('请输入手机号'));
                         } else {
@@ -81,17 +81,19 @@
                                 callback();
                             }
                         }
-                    };
+                    };*/
                     return {
                         loginForm: {
-                            phone: '',
+                           /* phone: '',*/
+                            account: '',
                             password: ''
                         },
                         msg:'',
                         rules: {
-                            phone: [
+                            /*phone: [
                                 {validator: validatePhone, trigger: 'blur'}
-                            ],
+                            ],*/
+                            account: [{required:true,message:'请输入账号',trigger:'blur'}],
                             password: [
                                 {required: true, message: '请输入密码', trigger: 'blur'}
                             ]
@@ -114,9 +116,10 @@
                     axios.post("/doLogin", p)
                         .then(function (response) {
                             let data = response.data;
-                            if (data && data.code === 200)
+                            if (data && data.code === 200) {
+                                window.location.href = "/"
                                 self.msg = '登录成功!';
-                            else
+                            }else
                                 self.msg = '<span style="color: #bb0202">'+data.msg+'</span>';
                         })
                         .catch(function (error) {

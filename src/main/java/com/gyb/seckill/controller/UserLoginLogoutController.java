@@ -33,7 +33,7 @@ public class UserLoginLogoutController {
     @PostMapping("/doLogin")
     @ResponseBody
     public ResponseResult login(@RequestBody
-                                    @Validated(LoginType.PhoneLogin.class) LoginForm loginForm,
+                                    @Validated(LoginType.AccountLogin.class) LoginForm loginForm,
                                 HttpServletRequest request){
         String remoteAddr = request.getRemoteAddr();
         loginForm.setIp(remoteAddr);
@@ -52,6 +52,24 @@ public class UserLoginLogoutController {
         }
         userLoginService.logout(token);
         return ResponseResult.ok();
+    }
+
+    @GetMapping("/logout")
+    public String viewLogout(@RequestParam(value = "token",required = false) String paramToken,
+                                 @CookieValue(value = "token",required = false) String cookieToken,
+                             HttpServletRequest request){
+        String token = "";
+        if(StringUtils.hasText(paramToken)){
+            token = paramToken;
+        }else if(StringUtils.hasText(cookieToken)){
+            token = cookieToken;
+        }
+        userLoginService.logout(token);
+        String referer = request.getHeader("Referer");
+        if(referer != null) {
+            return "redirect:" + referer;
+        }
+        return "redirect:/";
     }
 
 }

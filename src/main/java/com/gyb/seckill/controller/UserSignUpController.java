@@ -27,7 +27,7 @@ public class UserSignUpController {
 
     @GetMapping("/signUp")
     public String toSignUpPage(Model model){
-        model.addAttribute("title","注册");
+        model.addAttribute("title","用户注册");
         return "sign-up";
     }
 

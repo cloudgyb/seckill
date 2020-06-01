@@ -6,37 +6,49 @@
         <!-- 引入样式 -->
         <link th:href="@{/lib/css/element-ui.css}" rel="stylesheet">
         <style>
+            body{
+                margin: 0;
+            }
+            header{
+                padding: 0 50px;
+                height: 50px;
+                line-height: 50px;
+                font-size: 30px;
+                border-bottom: 1px #c8c9cc solid;
+            }
             #app {
-                width: 500px;
+                margin:20px auto;
+                width: 600px;
             }
         </style>
     </head>
     <body>
+        <header>
+            <span style="color: #ee4b19">商品秒杀</span>
+            <span style="font-size: 20px;">欢迎注册</span>
+        </header>
         <div id="app">
-            <el-main>
-            <form method="post" th:action="@{/doSignUp}">
-                <label>
-                    用户名
-                    <el-input v-model="nickName" placeholder="请输入用户名"></el-input>
-                </label>
-                <label>
-                    手机号
-                    <el-input v-model="phone" placeholder="请输入手机号码"></el-input>
-                </label>
-                <label>
-                    密码
-                    <el-input v-model="password" show-password placeholder="请输入密码"></el-input>
-                </label>
-                <label>
-                    确认密码
-                    <el-input v-model="secPassword" show-password placeholder="请确认密码"></el-input>
-                </label><br>
-                <p style="color: red" v-text="msg"></p>
-                <el-link type="primary" th:href="@{/login}">已有账号?去登录</el-link>
-                <br>
-                <el-button @click="signUpValidate() && signUp()">注册</el-button>
-            </form>
-            </el-main>
+            <el-steps :active="active" finish-status="success">
+                <el-step title="验证邮箱"></el-step>
+                <el-step title="填写账号信息"></el-step>
+                <el-step title="注册完成"></el-step>
+            </el-steps>
+            <div style="margin: 20px" v-show="active==0">
+                <el-input v-model="regForm.email" placeholder="填写邮箱,可用于找回密码，登录"></el-input>
+                <br/><br>
+                <el-button style="width:100%" @click="sendValidCode()">发送验证码</el-button>
+            </div>
+            <div style="margin: 20px" v-show="active==1">
+                <el-input v-model="regForm.email" placeholder="填写邮箱,可用于找回密码，登录"></el-input>
+                <el-input v-model="regForm.phone" placeholder="填写手机号"></el-input>
+                <el-input v-model="regForm.age" placeholder="年龄"></el-input>
+            </div>
+            <div style="margin: 20px" v-show="active==2">
+                <span>恭喜完成注册！</span>
+                <a href="/login">请登录</a>
+            </div>
+            <el-link th:href="@{/login}" type="primary" style="font-size: 10px;float:right">已有账号？去登陆</el-link>
+            <el-button style="margin-top: 12px;" type="primary" @click="next">下一步</el-button>
         </div>
     </body>
     <script th:src="@{/lib/js/axios.min.js}"></script>
@@ -45,14 +57,29 @@
     <script>
         new Vue({
             el: '#app',
-            data: {
-                nickName:'',
-                phone:'',
-                password:'',
-                secPassword:'',
-                msg:''
+            data: function(){
+                return {
+                    active: 0,
+                    isEmailValidated:false,
+                    regForm:{
+                        email:'',
+                        nickName:'',
+                        phone:'',
+                        password:'',
+                        secPassword:'',
+                        msg:''
+                    },
+                    rules:{
+
+                    }
+                };
             },
             methods: {
+                next: function(){
+                    if(this.active++ >= 3){
+                        this.active = 0;
+                    }
+                },
                 signUpValidate: function(){
                     if(this.nickName.trim() === ''){
                         this.msg = '用户名不能为空!';

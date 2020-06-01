@@ -26,6 +26,7 @@ public class OrderInfo {
   private int goodsCount;
   private BigDecimal goodsPrice;
   private int orderChannel;
+  //0 未支付，1已支付，2已发货，3已收货，4已退款，5已完成
   private int status;
   private Timestamp createDate;
   private Timestamp payDate;

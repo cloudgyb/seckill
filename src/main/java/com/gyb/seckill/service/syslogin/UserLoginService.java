@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 /**
@@ -43,6 +45,11 @@ public class UserLoginService {
     }
 
     public void logout(String token){
+        HttpServletRequest httpRequest = HttpServletUtil.getHttpRequest();
+        HttpSession session = httpRequest.getSession(false);
+        if(session != null){
+            session.removeAttribute("user");
+        }
         redisService.del(UserSessionTokenPrefix.TK,token);
     }
 
@@ -51,11 +58,13 @@ public class UserLoginService {
         String token = UUID.randomUUID().toString();
         redisService.set(UserSessionTokenPrefix.TK,token,user);
         HttpServletResponse httpResponse = HttpServletUtil.getHttpResponse();
+        HttpServletRequest httpRequest = HttpServletUtil.getHttpRequest();
+        HttpSession session = httpRequest.getSession();
+        session.setAttribute("user",user);
+        session.setMaxInactiveInterval(UserSessionTokenPrefix.EXPIRE_SECONDS);
         Cookie cookie = new Cookie(UserSessionTokenPrefix.TOKEN, token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        //cookie.setMaxAge(UserSessionTokenPrefix.EXPIRE_SECONDS);
-        //cookie.setSecure(true);
         httpResponse.addCookie(cookie);
         return token;
     }

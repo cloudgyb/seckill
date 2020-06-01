@@ -4,6 +4,7 @@ import com.gyb.seckill.dao.GoodsDao;
 import com.gyb.seckill.dao.MiaoshaGoodsDao;
 import com.gyb.seckill.dao.MiaoshaOrderDao;
 import com.gyb.seckill.dao.OrderInfoDao;
+import com.gyb.seckill.dto.MiaoshaGoodsDTO;
 import com.gyb.seckill.entity.Goods;
 import com.gyb.seckill.entity.MiaoshaGoods;
 import com.gyb.seckill.entity.MiaoshaOrder;
@@ -34,8 +35,8 @@ class SeckillDemoApplicationTests {
 
     @Test
     void findAllMiaoshaGoods(){
-        List<MiaoshaGoods> all = miaoshaGoodsDao.findAll();
-        for (MiaoshaGoods miaoshaGoods : all) {
+        List<MiaoshaGoodsDTO> all = miaoshaGoodsDao.findAll();
+        for (MiaoshaGoodsDTO miaoshaGoods : all) {
             System.out.println(miaoshaGoods);
         }
     }

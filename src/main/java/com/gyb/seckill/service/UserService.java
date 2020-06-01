@@ -38,6 +38,7 @@ public class UserService {
             if(user != null){ //刷新token过期时间
                 redisService.set(UserSessionTokenPrefix.TK,token,user);
             }
+            return user;
         }
         return null;
     }

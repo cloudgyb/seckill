@@ -2,12 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gyb.seckill.dao.MiaoshaGoodsDao">
-  <sql id="fields">
-    id,goods_id as goodsId,miaosha_price as miaoshaPrice,
-    stock_count as stockCount,start_date as startDate,
+  <sql id="miaosha_goods_columns">
+    miaosha_goods.id as id,
+    goods_id as goodsId,
+    miaosha_price as miaoshaPrice,
+    stock_count as stockCount,
+    start_date as startDate,
     end_date as endDate
   </sql>
-  <select id="findAll" resultType="MiaoshaGoods">
-    select <include refid="fields" /> from miaosha_goods
+  <sql id="goods_columns">
+    goods_name as goodsName,
+    goods_title as goodsTitle,
+    goods_img as goodsImg,
+    goods_detail as goodsDetail,
+    goods_price as goodsPrice,
+    goods_stock as goodsStock
+  </sql>
+  <select id="findAll" resultType="com.gyb.seckill.dto.MiaoshaGoodsDTO">
+    select
+    <include refid="goods_columns" />,
+    <include refid="miaosha_goods_columns"/>
+    from goods
+    left join miaosha_goods on goods.id=miaosha_goods.goods_id
   </select>
 </mapper>

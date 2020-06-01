@@ -3,11 +3,24 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gyb.seckill.dao.GoodsDao">
   <sql id="fields">
-    id,goods_name as goodsName,goods_title as goodsTitle,
-    goods_img as goodsImg,goods_detail as goodsDetail,
-    goods_price as goodsPrice,goods_stock as goodsStock
+    id,
+    goods_name as goodsName,
+    goods_title as goodsTitle,
+    goods_img as goodsImg,
+    goods_detail as goodsDetail,
+    goods_price as goodsPrice,
+    goods_stock as goodsStock
+  </sql>
+  <sql id="miaosha_goods_columns">
+     mg.id as miaoshaGoodsId,
+     mg.miaosha_price as miaoshaPrice,
+     mg.stock_count as miaoshaStockCount,
+     mg.start_date as startDate,
+     mg.end_date as endDate
   </sql>
   <select id="findAll" resultType="Goods">
-    select <include refid="fields" /> from goods
+    select
+        <include refid="fields" />
+    from goods
   </select>
 </mapper>

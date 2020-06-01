@@ -1,5 +1,6 @@
 package com.gyb.seckill.dao;
 
+import com.gyb.seckill.dto.MiaoshaGoodsDTO;
 import com.gyb.seckill.entity.MiaoshaGoods;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -15,5 +16,5 @@ import java.util.List;
 @Repository
 @Mapper
 public interface MiaoshaGoodsDao {
-    List<MiaoshaGoods> findAll();
+    List<MiaoshaGoodsDTO> findAll();
 }
