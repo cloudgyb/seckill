@@ -25,4 +25,12 @@
     from goods
     left join miaosha_goods on goods.id=miaosha_goods.goods_id
   </select>
+  <select id="getById" resultType="com.gyb.seckill.dto.MiaoshaGoodsDTO">
+    select
+    <include refid="goods_columns" />,
+    <include refid="miaosha_goods_columns"/>
+    from goods
+    left join miaosha_goods on goods.id=miaosha_goods.goods_id
+    where miaosha_goods.id=#{id}
+  </select>
 </mapper>

@@ -1,8 +1,8 @@
 package com.gyb.seckill.config.cache;
 
-import com.gyb.seckill.config.cache.CacheKeyPrefix;
-
 /**
+ * 缓存key前缀抽象类
+ *
  * @author geng
  * 2020/4/19
  */
@@ -18,7 +18,7 @@ public abstract class AbstractCacheKeyPrefix implements CacheKeyPrefix {
     private final int expireSeconds;
 
     public AbstractCacheKeyPrefix(String id) {
-        this(id,0);
+        this(id, 0);
     }
 
     public AbstractCacheKeyPrefix(String id, int expireSeconds) {
@@ -34,6 +34,6 @@ public abstract class AbstractCacheKeyPrefix implements CacheKeyPrefix {
 
     @Override
     public String getPrefix() {
-        return this.getClass().getSimpleName()+":"+this.id;
+        return this.getClass().getSimpleName() + ":" + this.id;
     }
 }

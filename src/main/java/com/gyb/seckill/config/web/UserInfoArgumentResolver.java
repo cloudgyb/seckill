@@ -12,10 +12,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 /**
+ * 前端控制器User参数解析器
+ *
  * @author geng
  * 2020/5/30
  */
@@ -36,9 +35,9 @@ public class UserInfoArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
-                                  NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory){
+                                  NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) {
         String token = nativeWebRequest.getParameter(UserSessionTokenPrefix.TOKEN);
-        if(token == null || "".equals(token)){
+        if (token == null || "".equals(token)) {
             token = HttpServletUtil.getCookieValue(UserSessionTokenPrefix.TOKEN);
         }
         return userService.getByToken(token);

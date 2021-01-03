@@ -48,14 +48,14 @@ public class UserLoginService {
         HttpServletRequest httpRequest = HttpServletUtil.getHttpRequest();
         HttpSession session = httpRequest.getSession(false);
         if(session != null){
-            session.removeAttribute("user");
+            session.invalidate();
         }
         redisService.del(UserSessionTokenPrefix.TK,token);
     }
 
     private String saveSession(LoginValidatorOutput output) {
         User user = output.getUser();
-        String token = UUID.randomUUID().toString();
+        String token = UUID.randomUUID().toString().replace("-","");
         redisService.set(UserSessionTokenPrefix.TK,token,user);
         HttpServletResponse httpResponse = HttpServletUtil.getHttpResponse();
         HttpServletRequest httpRequest = HttpServletUtil.getHttpRequest();
