@@ -16,4 +16,8 @@ import java.util.List;
 @Mapper
 public interface MiaoshaOrderDao {
     List<MiaoshaOrder> findAll();
+
+    int save(MiaoshaOrder miaoshaOrder);
+
+    List<MiaoshaOrder> findByGoodsIdAndUserId(long goodsId, int userId);
 }

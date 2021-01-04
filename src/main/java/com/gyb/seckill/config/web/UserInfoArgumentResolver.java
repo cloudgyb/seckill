@@ -40,6 +40,13 @@ public class UserInfoArgumentResolver implements HandlerMethodArgumentResolver {
         if (token == null || "".equals(token)) {
             token = HttpServletUtil.getCookieValue(UserSessionTokenPrefix.TOKEN);
         }
-        return userService.getByToken(token);
+        if (token == null || "".equals(token)) {
+            throw new NoLoginException("token 丢失！");
+        }
+        final User user = userService.getByToken(token);
+        if(user == null){
+            throw new NoLoginException("session 过期！");
+        }
+        return user;
     }
 }

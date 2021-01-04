@@ -68,7 +68,7 @@
                                     <span style="color: #e1251b">来晚了哦，秒杀已结束</span>
                                 </span>
                             </div>
-                            <el-button type="danger" th:disabled="${detail.miaoshaStatus}!=1">立即秒杀</el-button>
+                            <el-button type="danger" v-on:click="secondsKill" th:disabled="${detail.miaoshaStatus}!=1">立即秒杀</el-button>
                         </div>
                     </el-col>
                 </el-row>
@@ -86,6 +86,7 @@
             el: '#app',
             data: function(){
                 return {
+                    goodsId:[[${detail.goodsDetail.goodsId}]],
                     remainSeconds:[[${detail.remainSeconds}]],
                     remainTime:'00天00时00分00秒',
                     timer:null
@@ -109,14 +110,33 @@
                     if(this.remainSeconds === 0) {
                         clearInterval(this.timer);
                     }
+                },
+                secondsKill:function (){
+                    let param = "goodsId="+this.goodsId
+                    axios.post("/secondsKill",param)
+                        .then(function (response) {
+                            let data = response.data;
+                            if (data && data.code === 200) {
+                                window.location.href = "/order?id="+data.data.id
+                            }else {
+                                alert(data.msg)
+                            }
+                        })
+                        .catch(function (error) {
+                            if (error.response) {
+                                if(error.response.status === 403){
+                                    alert("请先登录！")
+                                    window.location.href="/login"
+                                }
+                            }else {
+                                alert("秒杀失败，请稍后重试！")
+                            }
+                        });
                 }
             },
             mounted:function () {
-                this.timer = setInterval(this.countDown,1000);
-            }/*,
-            destroyed:function() {
-                clearInterval(this.timer);
-            }*/
+                this.timer = setInterval(this.countDown, 1000);
+            }
         })
         //]]>
     </script>

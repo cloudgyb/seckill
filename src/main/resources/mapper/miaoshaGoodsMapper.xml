@@ -33,4 +33,15 @@
     left join miaosha_goods on goods.id=miaosha_goods.goods_id
     where miaosha_goods.id=#{id}
   </select>
+  <select id="getByGoodsId" resultType="com.gyb.seckill.dto.MiaoshaGoodsDTO">
+    select
+    <include refid="goods_columns" />,
+    <include refid="miaosha_goods_columns"/>
+    from goods
+    left join miaosha_goods on goods.id=miaosha_goods.goods_id
+    where miaosha_goods.goods_id=#{goodsId}
+  </select>
+  <update id="decrementStock">
+    update miaosha_goods set stock_count=stock_count-1 where id=#{id}
+  </update>
 </mapper>

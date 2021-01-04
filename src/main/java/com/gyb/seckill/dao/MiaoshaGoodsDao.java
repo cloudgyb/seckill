@@ -17,4 +17,6 @@ import java.util.List;
 public interface MiaoshaGoodsDao {
     List<MiaoshaGoodsDTO> findAll();
     MiaoshaGoodsDTO getById(long id);
+    MiaoshaGoodsDTO getByGoodsId(long goodsId);
+    int decrementStock(long id);
 }

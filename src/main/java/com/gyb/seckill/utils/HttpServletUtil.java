@@ -38,4 +38,9 @@ public final class HttpServletUtil {
         return getHttpRequest().getSession(creatable);
     }
 
+    public static boolean isAjaxRequest() {
+        final HttpServletRequest httpRequest = getHttpRequest();
+        final String header = httpRequest.getHeader("X-Requested-With");
+        return header != null && !"".equals(header);
+    }
 }

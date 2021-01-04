@@ -9,4 +9,11 @@
   <select id="findAll" resultType="MiaoshaOrder">
     select <include refid="fields" /> from miaosha_order
   </select>
+  <select id="findByGoodsIdAndUserId" resultType="MiaoshaOrder">
+    select <include refid="fields" /> from miaosha_order where goods_id=#{goodsId} and user_id=#{userId}
+  </select>
+  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    insert into miaosha_order(user_id,goods_id,order_id)
+    values(#{userId},#{goodsId},#{orderId})
+  </insert>
 </mapper>
