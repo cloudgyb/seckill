@@ -29,6 +29,11 @@ public class GoodsService {
         return goodsDao.findAll();
     }
 
+
+    public Goods getGoods(long goodsId) {
+        return goodsDao.findById(goodsId);
+    }
+
     public List<MiaoshaGoodsDTO> getAllMiaoshaGoods(){
         return miaoshaGoodsDao.findAll();
     }

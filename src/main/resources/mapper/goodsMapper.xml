@@ -23,4 +23,9 @@
         <include refid="fields" />
     from goods
   </select>
+  <select id="findById" resultType="Goods">
+    select
+    <include refid="fields" />
+    from goods where id=#{id}
+  </select>
 </mapper>

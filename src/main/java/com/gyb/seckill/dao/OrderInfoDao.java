@@ -16,5 +16,9 @@ import java.util.List;
 @Mapper
 public interface OrderInfoDao {
     List<OrderInfo> findAll();
+    OrderInfo findById(long id);
+
+    OrderInfo findByIdAndUserId(long id, int userId);
+
     int save(OrderInfo orderInfo);
 }

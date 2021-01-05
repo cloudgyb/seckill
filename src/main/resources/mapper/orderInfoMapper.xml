@@ -17,6 +17,12 @@
   <select id="findAll" resultType="OrderInfo">
     select <include refid="fields" /> from order_info
   </select>
+  <select id="findById" resultType="OrderInfo">
+    select <include refid="fields" /> from order_info where id=#{id}
+  </select>
+  <select id="findByIdAndUserId" resultType="OrderInfo">
+    select <include refid="fields" /> from order_info where id=#{id} and user_id=#{userId}
+  </select>
   <insert id="save" keyProperty="id" useGeneratedKeys="true">
     insert into order_info(<include refid="saveFields"></include>) values(
      #{userId},#{goodsId},#{deliveryAddrId},#{goodsName},#{goodsCount},

@@ -16,4 +16,6 @@ import java.util.List;
 @Mapper
 public interface GoodsDao {
     List<Goods> findAll();
+
+    Goods findById(long id);
 }
