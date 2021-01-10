@@ -1,11 +1,12 @@
 package com.gyb.seckill.config.web;
 
+import com.gyb.seckill.config.AuthenticationInterceptor;
+import com.gyb.seckill.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.HandlerMapping;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -19,13 +20,30 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     private final UserInfoArgumentResolver userInfoArgumentResolver;
+    private final UserService userService;
+
     @Autowired
-    public WebConfig(UserInfoArgumentResolver userInfoArgumentResolver) {
+    public WebConfig(UserInfoArgumentResolver userInfoArgumentResolver,
+                     UserService userService) {
         this.userInfoArgumentResolver = userInfoArgumentResolver;
+        this.userService = userService;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new AuthenticationInterceptor(userService))
+                .addPathPatterns("/**")
+                .excludePathPatterns("/static/**")
+                .excludePathPatterns("*.htm");
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(userInfoArgumentResolver);
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/","/goods-list.htm");
     }
 }

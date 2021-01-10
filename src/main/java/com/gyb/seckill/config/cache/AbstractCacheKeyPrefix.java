@@ -36,4 +36,8 @@ public abstract class AbstractCacheKeyPrefix implements CacheKeyPrefix {
     public String getPrefix() {
         return this.getClass().getSimpleName() + ":" + this.id;
     }
+
+    public String getId() {
+        return id;
+    }
 }

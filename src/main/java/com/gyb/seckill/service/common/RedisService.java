@@ -36,6 +36,20 @@ public class RedisService {
             jedis.close();
         }
     }
+
+    public <T> T get(String key, Class<T> clazz){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            String s = jedis.get(key);
+            if(s == null)
+                return null;
+            return JSON.parseObject(s, clazz);
+        }finally {
+            assert jedis != null;
+            jedis.close();
+        }
+    }
     public <T> void set(CacheKeyPrefix prefix,String key,T t){
         Jedis jedis = null;
         try {
@@ -52,6 +66,27 @@ public class RedisService {
                 replyCode = jedis.set(realKey,jsonStr);
             else
                 replyCode = jedis.setex(realKey,expireSeconds,jsonStr);
+            logger.info("Jedis set reply code:"+replyCode);
+        }finally {
+            assert jedis != null;
+            jedis.close();
+        }
+    }
+
+    public <T> void set(String key,T t,int expireSeconds){
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            String jsonStr;
+            if(t instanceof Number || t instanceof String)
+                jsonStr = t+"";
+            else
+                jsonStr = JSON.toJSONString(t);
+            String replyCode;
+            if(expireSeconds <= 0)
+                replyCode = jedis.set(key,jsonStr);
+            else
+                replyCode = jedis.setex(key,expireSeconds,jsonStr);
             logger.info("Jedis set reply code:"+replyCode);
         }finally {
             assert jedis != null;

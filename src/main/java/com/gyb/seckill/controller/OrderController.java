@@ -1,13 +1,13 @@
 package com.gyb.seckill.controller;
 
+import com.gyb.seckill.config.RequiredLogin;
 import com.gyb.seckill.entity.Goods;
 import com.gyb.seckill.entity.OrderInfo;
-import com.gyb.seckill.entity.User;
 import com.gyb.seckill.service.GoodsService;
 import com.gyb.seckill.service.OrderService;
+import com.gyb.seckill.vo.OrderDetailVO;
 import com.gyb.seckill.vo.ResponseResult;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,20 +29,25 @@ public class OrderController {
         this.goodsService = goodsService;
     }
 
+    @RequiredLogin
     @GetMapping("/order")
     @ResponseBody
-    public ResponseResult getOrder(@RequestParam long id, User user){
-        return orderService.getOrder(id,user.getId());
+    public ResponseResult getOrder(@RequestParam long id) {
+        return orderService.getOrder(id);
     }
 
+    @RequiredLogin
     @GetMapping("/order/detail")
-    public String getOrderInfo(@RequestParam long id, User user, Model m){
-        OrderInfo order = orderService.getOrderDetail(id, user.getId());
-        m.addAttribute("order",order);
-        if(order != null){
+    @ResponseBody
+    public ResponseResult getOrderInfo(@RequestParam long id) {
+        OrderInfo order = orderService.getOrderDetail(id);
+        final OrderDetailVO vo = new OrderDetailVO();
+        vo.setOrderInfo(order);
+        if (order != null) {
             final Goods goods = goodsService.getGoods(order.getGoodsId());
-            m.addAttribute("goods",goods);
+            vo.setGoods(goods);
         }
-        return "order-detail";
+        return order == null ?
+                ResponseResult.error("订单不存在或已删除！") : ResponseResult.ok(vo);
     }
 }

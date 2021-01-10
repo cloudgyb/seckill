@@ -1,5 +1,7 @@
 package com.gyb.seckill.service;
 
+import com.gyb.seckill.config.cache.Cacheable;
+import com.gyb.seckill.config.cache.GoodsCacheKeyPrefix;
 import com.gyb.seckill.dao.GoodsDao;
 import com.gyb.seckill.dao.MiaoshaGoodsDao;
 import com.gyb.seckill.dto.MiaoshaGoodsDTO;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
+ * 商品服务类
+ *
  * @author geng
  * 2020/6/1
  */
@@ -25,7 +29,7 @@ public class GoodsService {
         this.miaoshaGoodsDao = miaoshaGoodsDao;
     }
 
-    public List<Goods> getAllGoods(){
+    public List<Goods> getAllGoods() {
         return goodsDao.findAll();
     }
 
@@ -34,12 +38,16 @@ public class GoodsService {
         return goodsDao.findById(goodsId);
     }
 
-    public List<MiaoshaGoodsDTO> getAllMiaoshaGoods(){
+    @Cacheable(cacheName = "goods:all", expireTime = 60)
+    public List<MiaoshaGoodsDTO> getAllMiaoshaGoods() {
         return miaoshaGoodsDao.findAll();
     }
 
-    public MiaoshaGoodsDetail getMiaoshaGoodsDetail(long id){
+    @Cacheable(cacheName = "goods:detail", key = "id", expireTime = 60)
+    public MiaoshaGoodsDetail getMiaoshaGoodsDetail(long id) {
         MiaoshaGoodsDTO miaoshaGoodsDTO = miaoshaGoodsDao.getById(id);
+        if (miaoshaGoodsDTO == null)
+            return null;
         MiaoshaGoodsDetail miaoshaGoodsDetail = new MiaoshaGoodsDetail();
         miaoshaGoodsDetail.setGoodsDetail(miaoshaGoodsDTO);
         long startTime = miaoshaGoodsDTO.getStartDate().getTime();
@@ -47,16 +55,16 @@ public class GoodsService {
         long now = System.currentTimeMillis();
         int miaoshaStatus;
         long remainSeconds = 0; //距离秒杀开始或者结束还剩多少秒
-        if(startTime > now){ //秒杀还没开始
+        if (startTime > now) { //秒杀还没开始
             miaoshaStatus = 0;
             remainSeconds = startTime - now;
-        }else if(startTime < now && now < endTime){ //秒杀进行中
+        } else if (startTime < now && now < endTime) { //秒杀进行中
             miaoshaStatus = 1;
             remainSeconds = endTime - now;
-        }else{ //秒杀结束
+        } else { //秒杀结束
             miaoshaStatus = 2;
         }
-        remainSeconds = remainSeconds/1000;
+        remainSeconds = remainSeconds / 1000;
         miaoshaGoodsDetail.setMiaoshaStatus(miaoshaStatus);
         miaoshaGoodsDetail.setRemainSeconds(remainSeconds);
         return miaoshaGoodsDetail;
