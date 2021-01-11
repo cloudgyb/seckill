@@ -1,7 +1,6 @@
 package com.gyb.seckill.service;
 
 import com.gyb.seckill.config.cache.Cacheable;
-import com.gyb.seckill.config.cache.GoodsCacheKeyPrefix;
 import com.gyb.seckill.dao.GoodsDao;
 import com.gyb.seckill.dao.MiaoshaGoodsDao;
 import com.gyb.seckill.dto.MiaoshaGoodsDTO;

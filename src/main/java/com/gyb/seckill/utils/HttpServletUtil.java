@@ -26,8 +26,10 @@ public final class HttpServletUtil {
     public static String getCookieValue(String cookieName){
         HttpServletRequest httpRequest = getHttpRequest();
         Cookie[] cookies = httpRequest.getCookies();
+        if (cookies == null)
+            return null;
         for (Cookie cookie : cookies) {
-            if(cookieName.equals(cookie.getName())){
+            if (cookieName.equals(cookie.getName())) {
                 return cookie.getValue();
             }
         }
