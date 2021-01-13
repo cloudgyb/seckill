@@ -24,13 +24,19 @@ public class RedisConfig {
     private int redisPort;
     @Value("${redis.password:#{null}}")
     private String redisPass;
+    @Value("${redis.max-total:1000}")
+    private int redisMaxTotal;
+    @Value("${redis.max-idle:10}")
+    private int redisMaxIdle;
+    @Value("${redis.max-wait:3000}")
+    private int redisMaxWaitMillis;
 
     @Bean
     public JedisPool jedisPool() {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxTotal(10);
-        jedisPoolConfig.setMaxIdle(10);
-        jedisPoolConfig.setMaxWaitMillis(3000);
+        jedisPoolConfig.setMaxTotal(redisMaxTotal);
+        jedisPoolConfig.setMaxIdle(redisMaxIdle);
+        jedisPoolConfig.setMaxWaitMillis(redisMaxWaitMillis);
         final JedisPool jedisPool = new JedisPool(jedisPoolConfig, redisHost,
                 redisPort, 3000, redisPass);
         pingRedis(jedisPool);
