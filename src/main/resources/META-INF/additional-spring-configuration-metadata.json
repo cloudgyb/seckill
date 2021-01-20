@@ -1,0 +1,47 @@
+{
+  "groups": [
+    {
+      "name": "redis",
+      "type": "com.gyb.seckill.config.RedisConfigProperties",
+      "description": "The group of configuration of redis."
+    }
+  ],
+  "properties": [
+    {
+      "name": "redis.host",
+      "type": "java.lang.String",
+      "description": "The host of Redis server.",
+      "defaultValue": "localhost"
+    },
+    {
+      "name": "redis.port",
+      "type": "java.lang.Integer",
+      "description": "The port of Redis server.",
+      "defaultValue": 6379
+    },
+    {
+      "name": "redis.password",
+      "type": "java.lang.String",
+      "description": "The password of Redis server.",
+      "defaultValue": "null"
+    },
+    {
+      "name": "redis.max-total",
+      "type": "java.lang.Integer",
+      "defaultValue": 1000,
+      "description": "The allow max number of redis connection."
+    },
+    {
+      "name": "redis.max-idle",
+      "type": "java.lang.Integer",
+      "description": "The max idle number of redis connection.",
+      "defaultValue": 10
+    },
+    {
+      "name": "redis.max-wait-millis",
+      "type": "java.lang.Integer",
+      "description": "The max timeout of connect to redis.",
+      "defaultValue": 3000
+    }
+  ]
+}
