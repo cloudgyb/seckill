@@ -8,7 +8,6 @@ import com.gyb.seckill.service.syslogin.UserLoginService;
 import com.gyb.seckill.vo.ResponseResult;
 import com.gyb.seckill.vo.UserVo;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
