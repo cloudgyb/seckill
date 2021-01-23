@@ -25,12 +25,6 @@ public class UserSignUpController {
         this.signUpService = signUpService;
     }
 
-    @GetMapping("/signUp")
-    public String toSignUpPage(Model model){
-        model.addAttribute("title","用户注册");
-        return "sign-up";
-    }
-
     @PostMapping("/doSignUp")
     @ResponseBody
     public ResponseResult doSignUp(@Validated @RequestBody UserSignUpForm form){

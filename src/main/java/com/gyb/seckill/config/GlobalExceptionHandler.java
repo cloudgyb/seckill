@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
         if(HttpServletUtil.isAjaxRequest())
             return ResponseResult.error("用户未登录！");
         else{
-            return new ModelAndView("/login");
+            return "用户未登录或者登录过期！";
         }
     }
 
