@@ -116,4 +116,32 @@ public class RedisService {
                 jedis.close();
         }
     }
+
+    public Long decr(String key){
+        Jedis jedis = null;
+        try{
+            jedis = jedisPool.getResource();
+            return jedis.decr(key);
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+        return 0L;
+    }
+
+    public Long incr(String key){
+        Jedis jedis = null;
+        try{
+            jedis = jedisPool.getResource();
+            return jedis.incr(key);
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }finally {
+            if(jedis != null)
+                jedis.close();
+        }
+        return 0L;
+    }
 }

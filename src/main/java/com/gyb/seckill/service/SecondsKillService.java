@@ -6,6 +6,7 @@ import com.gyb.seckill.dao.OrderInfoDao;
 import com.gyb.seckill.dto.MiaoshaGoodsDTO;
 import com.gyb.seckill.entity.MiaoshaOrder;
 import com.gyb.seckill.entity.OrderInfo;
+import com.gyb.seckill.service.common.RedisService;
 import com.gyb.seckill.vo.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,24 +25,30 @@ import java.util.List;
 @Slf4j
 @Service
 public class SecondsKillService {
+    private final static String GOODS_STOCK_PREFIX = "goods:stock:";
+
     private final MiaoshaGoodsDao miaoshaGoodsDao;
     private final MiaoshaOrderDao miaoshaOrderDao;
     private final OrderInfoDao orderInfoDao;
+    private final GoodsService goodsService;
+    private final RedisService redisService;
 
     private final TransactionTemplate transactionTemplate;
 
     public SecondsKillService(MiaoshaGoodsDao miaoshaGoodsDao,
                               MiaoshaOrderDao miaoshaOrderDao,
                               OrderInfoDao orderInfoDao,
-                              TransactionTemplate transactionTemplate) {
+                              GoodsService goodsService, RedisService redisService, TransactionTemplate transactionTemplate) {
         this.miaoshaGoodsDao = miaoshaGoodsDao;
         this.miaoshaOrderDao = miaoshaOrderDao;
         this.orderInfoDao = orderInfoDao;
+        this.goodsService = goodsService;
+        this.redisService = redisService;
         this.transactionTemplate = transactionTemplate;
     }
 
     public ResponseResult secondsKill(long goodsId,int userId) {
-        final MiaoshaGoodsDTO secondsGoods = miaoshaGoodsDao.getByGoodsId(goodsId);
+        final MiaoshaGoodsDTO secondsGoods = goodsService.getMiaoshaGoodsDetail(goodsId);
         if(secondsGoods == null){
             return ResponseResult.error("该商品暂时无法秒杀！");
         }
@@ -51,7 +58,8 @@ public class SecondsKillService {
         if(secondsGoods.getEndDate().getTime() < System.currentTimeMillis()){
             return ResponseResult.error("秒杀已经结束了！");
         }
-        if(secondsGoods.getStockCount() <= 0){
+        Long stock = redisService.decr(GOODS_STOCK_PREFIX + goodsId);
+        if(stock < 0){
             return ResponseResult.error("来晚了，商品已被抢完了！");
         }
         List<MiaoshaOrder> miaoshaOrderOld = miaoshaOrderDao.findByGoodsIdAndUserId(goodsId,userId);

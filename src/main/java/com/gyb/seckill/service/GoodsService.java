@@ -36,7 +36,7 @@ public class GoodsService {
         return miaoshaGoodsDao.findAll();
     }
 
-    @Cacheable(cacheName = "goods:detail", key = "id", expireTime = 60)
+    @Cacheable(cacheName = "goods:detail", key = "id", expireTime = 120)
     public MiaoshaGoodsDTO getMiaoshaGoodsDetail(long id) {
         return miaoshaGoodsDao.getById(id);
     }
