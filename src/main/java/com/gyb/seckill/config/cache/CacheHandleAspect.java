@@ -53,12 +53,16 @@ public class CacheHandleAspect {
             cacheKey = sb.toString();
         }
         //取缓存
-        final Object cacheObject = redisService.get(cacheKey, ms.getReturnType());
+        Object cacheObject = redisService.get(cacheKey, ms.getReturnType());
         if (cacheObject != null)
             return cacheObject;
-
-        final Object proceed = pjp.proceed();
-        redisService.set(cacheKey, proceed, annotation.expireTime());
-        return proceed;
+        synchronized (this) {
+            cacheObject = redisService.get(cacheKey, ms.getReturnType());
+            if (cacheObject != null)
+                return cacheObject;
+            final Object proceed = pjp.proceed();
+            redisService.set(cacheKey, proceed, annotation.expireTime());
+            return proceed;
+        }
     }
 }
