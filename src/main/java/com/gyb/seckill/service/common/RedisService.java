@@ -38,29 +38,22 @@ public class RedisService {
     }
 
     public <T> T get(String key, Class<T> clazz){
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
+        try (Jedis jedis = jedisPool.getResource()) {
             String s = jedis.get(key);
             if (s == null)
                 return null;
             return JSON.parseObject(s, clazz);
         } catch (Exception e) {
             log.error(e.getMessage());
-        } finally {
-            if (jedis != null)
-                jedis.close();
         }
         return null;
     }
 
     public <T> void set(CacheKeyPrefix prefix,String key,T t){
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
+        try (Jedis jedis = jedisPool.getResource()) {
             String jsonStr;
-            if(t instanceof Number || t instanceof String)
-                jsonStr = t+"";
+            if (t instanceof Number || t instanceof String)
+                jsonStr = t + "";
             else
                 jsonStr = JSON.toJSONString(t);
             String realKey = prefix.getPrefix() + key;
@@ -73,16 +66,11 @@ public class RedisService {
             logger.info("Jedis set reply code:" + replyCode);
         } catch (Exception e) {
             log.error(e.getMessage());
-        } finally {
-            if (jedis != null)
-                jedis.close();
         }
     }
 
     public <T> void set(String key,T t,int expireSeconds){
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
+        try (Jedis jedis = jedisPool.getResource()) {
             String jsonStr;
             if (t instanceof Number || t instanceof String)
                 jsonStr = t + "";
@@ -96,51 +84,33 @@ public class RedisService {
             logger.info("Jedis set reply code:" + replyCode);
         } catch (Exception e) {
             log.error(e.getMessage());
-        } finally {
-            if (jedis != null)
-                jedis.close();
         }
     }
 
     public void del(CacheKeyPrefix prefix,String key){
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
+        try (Jedis jedis = jedisPool.getResource()) {
             String realKey = prefix.getPrefix() + key;
             Long del = jedis.del(realKey);
             logger.info("Jedis del reply code:" + del);
         } catch (Exception e) {
             log.error(e.getMessage());
-        } finally {
-            if (jedis != null)
-                jedis.close();
         }
     }
 
     public Long decr(String key){
-        Jedis jedis = null;
-        try{
-            jedis = jedisPool.getResource();
+        try (Jedis jedis = jedisPool.getResource()) {
             return jedis.decr(key);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
-        }finally {
-            if(jedis != null)
-                jedis.close();
         }
         return 0L;
     }
 
     public Long incr(String key){
-        Jedis jedis = null;
-        try{
-            jedis = jedisPool.getResource();
+        try (Jedis jedis = jedisPool.getResource()) {
             return jedis.incr(key);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
-        }finally {
-            if(jedis != null)
-                jedis.close();
         }
         return 0L;
     }
